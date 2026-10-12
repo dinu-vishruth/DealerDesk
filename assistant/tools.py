@@ -55,10 +55,6 @@ TOOLS_SPEC = [
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "dealer_id": {
-                        "type": "integer",
-                        "description": "The ID of the dealer placing the draft order."
-                    },
                     "items": {
                         "type": "array",
                         "description": "List of order items with sku and integer quantity >= 1.",
@@ -72,7 +68,7 @@ TOOLS_SPEC = [
                         }
                     }
                 },
-                "required": ["dealer_id", "items"]
+                "required": ["items"]
             }
         }
     }

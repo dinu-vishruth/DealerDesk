@@ -41,10 +41,10 @@ def build_system_prompt(dealer: Dealer) -> str:
 
 
 def process_chat_message(session_id: str, dealer_id: int, message_text: str) -> dict:
-    if not session_id or not isinstance(session_id, str):
-        raise APIError("session_id is required.", code="VALIDATION_ERROR", status_code=400)
-    if not dealer_id:
-        raise APIError("dealer_id is required.", code="VALIDATION_ERROR", status_code=400)
+    if not isinstance(session_id, str) or not session_id.strip() or len(session_id.strip()) > 128:
+        raise APIError("session_id must be a non-blank string of at most 128 characters.", code="VALIDATION_ERROR", status_code=400)
+    if type(dealer_id) is not int or dealer_id < 1:
+        raise APIError("dealer_id must be a positive integer.", code="VALIDATION_ERROR", status_code=400)
     if not message_text or not isinstance(message_text, str) or not message_text.strip():
         raise APIError("message is required.", code="VALIDATION_ERROR", status_code=400)
 
@@ -57,6 +57,12 @@ def process_chat_message(session_id: str, dealer_id: int, message_text: str) -> 
         session_id=session_id.strip(),
         defaults={"dealer": dealer},
     )
+    if session.dealer_id != dealer.id:
+        raise APIError(
+            "This session belongs to another dealer. Start a new session.",
+            code="VALIDATION_ERROR",
+            status_code=400,
+        )
 
     # Save user message to session memory
     AssistantMessage.objects.create(
@@ -160,10 +166,10 @@ def process_chat_message(session_id: str, dealer_id: int, message_text: str) -> 
                     sku = fn_args.get("sku", "")
                     tool_result = execute_check_stock(sku=sku)
                 elif fn_name == "create_draft_order":
-                    target_dealer_id = fn_args.get("dealer_id") or dealer.id
                     items = fn_args.get("items", [])
                     tool_result = execute_create_draft_order(
-                        dealer_id=target_dealer_id,
+                        # Ownership is request context, never an LLM-selected argument.
+                        dealer_id=dealer.id,
                         items=items,
                         actions_list=actions_list,
                     )

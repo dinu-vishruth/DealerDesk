@@ -3,11 +3,48 @@
 **Submission Track:** `aiml`  
 **Video Walkthrough Link:** [Unlisted Video Walkthrough Link Placeholder](https://youtu.be/placeholder-vikmo-dealerdesk-aiml)
 
+## Dealer portal
+
+Start the existing Django server and open **http://127.0.0.1:8000/**:
+
+```bash
+python manage.py runserver 0.0.0.0:8000 --noreload
+```
+
+The portal uses Django templates and plain JavaScript/CSS, with no Node build step,
+CDN, separate frontend server, or additional runtime dependencies. Development
+static assets are served with `DJANGO_DEBUG=1` (the settings default). A deployment
+with debug disabled needs normal Django static-file serving configured.
+
+- **Catalogue:** live API search, category/vehicle filters, pagination, part details,
+  stock refresh, and a draft cart with estimated GST.
+- **My orders:** dealer-filtered orders, authoritative line/GST totals, and explicit
+  confirm, dispatch, deliver, or cancel controls according to the order's status.
+- **Dealer assistant:** real tool-calling chat, cited-part links, created-order links,
+  and separate conversations per selected dealer.
+- **Reorder insights:** current warehouse stock, replenishment suggestions, and
+  four-week forecast charts. Suggestions do not place supplier orders.
+
+Select a dealer before ordering. Carts and chat conversations are separate per
+dealer within the open page; they reset on reload. Only the selected dealer ID is
+remembered in browser storage. Dealer selection is context, not authentication:
+the assignment API intentionally requires no login.
+
+The backend binds assistant-created orders to the request dealer and rejects
+reuse of an existing session with a different dealer. Checkout retries reuse an
+idempotency key until the cart changes. Review draft details before confirming:
+creating a draft does not reserve stock.
+
+All portal data and actions use the existing `/api/` endpoints. An explicit
+`Accept: application/json` request to `/` still returns the original API index.
+The page and assets have HTTP/syntax checks; interactive visual browser QA remains
+outstanding because the in-app browser was unavailable during implementation.
+
 ---
 
 ## 1. Project Purpose & Scope
 
-VIKMO DealerDesk is an AI-native distributor operations platform designed for automotive and motorcycle parts supply chains across India. This repository contains the complete implementation for the **AI / ML Track**, adhering strictly to `API_CONTRACT.md`, the assignment brief, and the automated grading specification.
+VIKMO DealerDesk is a distributor operations platform for automotive and motorcycle parts supply chains across India. This repository implements the **AI / ML Track** and optional order-engine, supplier-sync, and dealer-portal functionality. Passing the existing tests and smoke checks does not establish full hidden-grader compliance; the remaining audit findings and video deliverable still need attention.
 
 ### Implemented Scope
 - **Part A1 — Backend Core**:
@@ -163,7 +200,7 @@ Against the bundle mock the sync reports `created=12 updated=26 unchanged=31 rej
 ```bash
 python manage.py test
 ```
-**Result:** 38/38 unit tests pass across all apps (`core`, `orders`, `forecasting`, `assistant`, `supplier`).
+**Result:** 41/41 tests pass across all apps (`core`, `orders`, `forecasting`, `assistant`, `supplier`), including assistant dealer/session ownership and invalid-identity regression checks.
 `orders.tests.ConfirmConcurrencyTests` fires 15 simultaneous confirms against 10 units of stock and asserts exactly 5 succeed with stock landing on 0 — the §7.3 no-oversell guarantee under the threaded dev server.
 
 ---

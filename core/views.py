@@ -1,4 +1,5 @@
 from django.http import JsonResponse
+from django.shortcuts import render
 from django.db.models import Q
 from rest_framework import status
 from rest_framework.views import APIView
@@ -19,7 +20,9 @@ def health(request):
 
 
 def root_index(request):
-    """GET / — Friendly index for browser visitors listing all API endpoints."""
+    """Serve the dealer portal; retain the API index for explicit JSON clients."""
+    if "application/json" not in request.headers.get("Accept", ""):
+        return render(request, "core/portal.html")
     return JsonResponse({
         "service": "VIKMO DealerDesk API",
         "track": "aiml",

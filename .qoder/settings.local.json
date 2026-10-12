@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cd \"C:\\\\Users\\\\Dinu\\\\Desktop\\\\resume&stuffs\\\\VIKMO DealerDesk Assignment\" && git log --oneline -20 2>&1 | head -30; echo \"---STATUS---\"; git status 2>&1 | head -40)",
+      "Bash(\"/c/Program Files/Docker/Docker/Docker Desktop.exe\" >/dev/null 2>&1 & echo \"launch requested\")"
+    ]
+  }
+}

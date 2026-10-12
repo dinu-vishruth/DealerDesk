@@ -1,6 +1,4 @@
 
-
-
 # DECISIONS.md — VIKMO DealerDesk (AI / ML Track)
 
 This document answers the 8 required technical questions for the AI / ML track, citing exact files and line numbers from the codebase.
