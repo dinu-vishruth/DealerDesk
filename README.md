@@ -233,7 +233,3 @@ This generates `ml/forecast.csv` (160 rows, 40 SKUs across weeks `2026-09-28`, `
 
 ---
 
-
-  - Explaining the 21.4% improvement over historical baselines.
-  - Sample standard deviation ($n-1$) safety stock calculations with live inventory.
-- **Minute 4:30 – 5:00**: Live execution of `smoke_test.py --track aiml` (10/10 PASS) and closing summary.
