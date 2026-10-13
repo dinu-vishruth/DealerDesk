@@ -1,7 +1,7 @@
 # VIKMO DealerDesk — AI / ML Track Implementation
 
 **Submission Track:** `aiml`  
-**Video Walkthrough Link:** [Unlisted Video Walkthrough Link Placeholder](https://youtu.be/placeholder-vikmo-dealerdesk-aiml)
+**Video Walkthrough Link:** https://drive.google.com/file/d/1BWV8ap9vGfIhgo4hrwHAaS2Q5UQNxOGu/view?usp=sharing
 
 ## Dealer portal
 
@@ -233,17 +233,7 @@ This generates `ml/forecast.csv` (160 rows, 40 SKUs across weeks `2026-09-28`, `
 
 ---
 
-## 7. Video Walkthrough Plan (5-Minute Outline)
 
-- **Minute 0:00 – 0:45**: Introduction, architecture overview, and verified run contract against fresh PostgreSQL.
-- **Minute 0:45 – 2:15**: Assistant tool-calling loop walkthrough (`assistant/service.py:43–214`):
-  - Request ingestion, session memory loading, and system prompt defense.
-  - Multi-turn tool execution (`search_parts`, `check_stock`, `create_draft_order`).
-  - DB-level citation extraction and action logging.
-- **Minute 2:15 – 3:30**: Shared order creation & financial calculations (`orders/services.py:131–300`):
-  - Atomic daily sequence generation (`ORD-YYYYMMDD-NNNN`).
-  - 18% GST line-by-line `ROUND_HALF_UP` precision.
-- **Minute 3:30 – 4:30**: Demand forecasting & reorder engine (`ml/train_forecast.py`, `forecasting/services.py`):
   - Explaining the 21.4% improvement over historical baselines.
   - Sample standard deviation ($n-1$) safety stock calculations with live inventory.
 - **Minute 4:30 – 5:00**: Live execution of `smoke_test.py --track aiml` (10/10 PASS) and closing summary.
